@@ -48,7 +48,18 @@ let UIController = (function () {
 // 1. budgetCtrl IS budgetcontroller, we simply call it something different for best practice. If we ever had to change anything with the budgetcontroller, we would simply need to 
 let controller = (function (budgetCtrl, UICtrl) {
 
-   let DOM = UICtrl.getDOMstrings();
+   let setUpEventListeners = function () {
+      let DOM = UICtrl.getDOMstrings();
+      // Event listener for when the button is clicked....after we do step 4 and create the function, we can pass it through the second argument.
+      document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
+      //Event listener for when the return key is pressed
+      document.addEventListener('keypress', function (event) {
+         if (event.keyCode === 13 || event.which === 13) {
+            ctrlAddItem();
+         }
+      });
+   };
+
 
 // 1.We set up the event listener for the input button here because this is the central place where we control what happens with each event
 // 2. Create the To Do list for the actions that need to be done when the submit button is clicked 
@@ -60,7 +71,6 @@ let controller = (function (budgetCtrl, UICtrl) {
 
       // 1. Get the filed input data
       let input = UICtrl.getInput();
-      console.log(input);
 
       // 2. Add the item to the budget Controller
 
@@ -69,21 +79,17 @@ let controller = (function (budgetCtrl, UICtrl) {
       // 4. calculate the budget
 
       // 5. Display the budget on the UI
+   };
+
+   return {
+      init: function () {
+         console.log('App has started.');
+         setUpEventListeners();
+      }
    }
    
    
-   // Event listener for when the button is clicked....after we do step 4 and create the function, we can pass it through the second argument.
-   document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
-
-   //Event listener for when the return key is pressed
-   document.addEventListener('keypress', function (event) {
-      if (event.keyCode === 13 || event.which === 13) {
-         ctrlAddItem();
-      }
-   });
-
-
-
-
-
 })(budgetController, UIController);
+
+//App will not start unless we call the init function which contains our event listeners
+controller.init();
