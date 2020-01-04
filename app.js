@@ -3,6 +3,59 @@
 // BUDGET CONTROLLER
 let budgetController = (function () {
    
+   let Expense = function (id, description, value) {
+      this.id = id;
+      this.description = description;
+      this.value = value;
+   };
+
+   let Income = function (id, description, value) {
+      this.id = id;
+      this.description = description;
+      this.value = value;
+   };
+
+   let data = {
+      allItems: {
+         exp: [],
+         inc: []
+      },
+      totals: {
+         exp: 0,
+         inc: 0
+      }
+   };
+
+   return {
+      addItem: function (type, des, val) {
+         let newItem;
+
+         //Create new ID
+         if (data.allItems[type].length > 0) {
+            ID = data.allItems[type][data.allItems[type].length - 1].id + 1;
+         } else {
+            ID = 0;
+         }
+
+         //Create new item based on 'inc' or 'exp' type
+         if (type === 'exp') {
+            newItem = new Expense(ID, des, val);
+         } else if (type === 'inc') {
+            newItem = new Income(ID, des, val);
+         }
+         //Push it into our data structure
+         data.allItems[type].push(newItem);
+
+         //Return the new element
+         return newItem;
+      },
+
+      // This is just for testing in the console, will be deleted before production
+      testing: function () {
+         console.log(data);
+      }
+   };
+
 
 })();
 
@@ -67,13 +120,13 @@ let controller = (function (budgetCtrl, UICtrl) {
 // 4. We create a function that will do the "to do list" actions so that we dont repeat code. (In the function we can console.log "it works" so we can confirm the button and key press events work)
    
    let ctrlAddItem = function () {
+      let input, newItem;
       // To Do list
-
       // 1. Get the filed input data
-      let input = UICtrl.getInput();
+      input = UICtrl.getInput();
 
       // 2. Add the item to the budget Controller
-
+      newItem = budgetCtrl.addItem(input.type, input.description, input.value);
       // 3. Add the item to the UI
 
       // 4. calculate the budget
