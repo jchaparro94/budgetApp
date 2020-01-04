@@ -78,7 +78,7 @@ let UIController = (function () {
          return {
             type: document.querySelector(DOMstrings.inputType).value,
             description: document.querySelector(DOMstrings.inputDescription).value,
-            value: document.querySelector(DOMstrings.inputValue).value
+            value: parseFloat(document.querySelector(DOMstrings.inputValue).value) //Parsefloat converts this string into a number. We need the value to be set as a number for calculations to be done.
 
          };
       },
@@ -158,22 +158,35 @@ let controller = (function (budgetCtrl, UICtrl) {
 // 3. Create the event listener for the keypress event. WE can concole log the 'event' to see what the keycodes are for each individual key. event.keycode || event.which 
 // 4. We create a function that will do the "to do list" actions so that we dont repeat code. (In the function we can console.log "it works" so we can confirm the button and key press events work)
    
+   let updateBudget = function () {
+      // 1. Calculate the budget
+
+      // 2. Return the budget
+
+      // 3. Display the budget on the UI
+   }
+
+
    let ctrlAddItem = function () {
       let input, newItem;
       // To Do list
       // 1. Get the filed input data
       input = UICtrl.getInput();
 
-      // 2. Add the item to the budget Controller
-      newItem = budgetCtrl.addItem(input.type, input.description, input.value);
-      // 3. Add the item to the UI
-      UICtrl.addListItem(newItem, input.type);
+      if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
+         // 2. Add the item to the budget Controller
+         newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+   
+         // 3. Add the item to the UI
+         UICtrl.addListItem(newItem, input.type);
+   
+         // 4. Clear the fields
+         UICtrl.clearFields();
+   
+         // 5. Calculate and Update budget
+         updateBudget();
+      }
 
-      // 4. Clear the fields
-      UICtrl.clearFields();
-      // 5. calculate the budget
-
-      // 6. Display the budget on the UI
    };
 
    return {
