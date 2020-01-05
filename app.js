@@ -15,6 +15,15 @@ let budgetController = (function () {
       this.value = value;
    };
 
+   let calculateTotal = function (type) {
+      let sum = 0;
+
+      data.allItems[type].forEach(function (cur) {
+         sum = sum + cur.value;
+      });
+      data.totals[type] = sum;
+   };
+
    let data = {
       allItems: {
          exp: [],
@@ -23,7 +32,9 @@ let budgetController = (function () {
       totals: {
          exp: 0,
          inc: 0
-      }
+      },
+      budget: 0,
+      percentage: -1
    };
 
    return {
@@ -48,6 +59,33 @@ let budgetController = (function () {
 
          //Return the new element
          return newItem;
+      },
+
+      calculateBudget: function () {
+        
+         // Calculate the total income and expensesContainer
+         calculateTotal('exp');
+         calculateTotal('inc');
+
+         // Calculate the budget: income - expensesContainer
+         data.budget = data.totals.inc - data.totals.exp;
+
+         // Calculate the percentage of income that we spent
+         if (data.totals.inc > 0) {
+            data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
+         } else {
+            data.percentage = -1;
+         }
+
+      },
+
+      getBudget: function () {
+         return {
+            budget: data.budget,
+            totalInc: data.totals.inc,
+            totalExp: data.totals.exp,
+            percentage: data.percentage
+         }
       },
 
       // This is just for testing in the console, will be deleted before production
@@ -159,11 +197,14 @@ let controller = (function (budgetCtrl, UICtrl) {
 // 4. We create a function that will do the "to do list" actions so that we dont repeat code. (In the function we can console.log "it works" so we can confirm the button and key press events work)
    
    let updateBudget = function () {
+      let budget;
       // 1. Calculate the budget
+      budgetCtrl.calculateBudget();
 
       // 2. Return the budget
-
+      budget = budgetCtrl.getBudget();
       // 3. Display the budget on the UI
+      console.log(budget);
    }
 
 
