@@ -27,6 +27,8 @@ body {
 }
 
 .right { float: right; }
+.red { color: #FF5049 !important; }
+.red-focus:focus { border: 1px solid #FF5049 !important; }
 
 /**********************************************
 *** TOP PART
@@ -157,9 +159,9 @@ body {
 
 .add_btn:active { transform: translateY(2px); }
 
-.add__type:focus,
-.add__description:focus,
-.add__value:focus {
+.add_type:focus,
+.add_description:focus,
+.add_value:focus {
     outline: none;
     border: 1px solid #28B9B5;
 }
