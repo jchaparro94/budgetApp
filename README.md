@@ -11,7 +11,7 @@
 * FontAwesome
 
 ## Improvements
-* Propery and secure online login
+* Proper and secure online login
 * Allowing users to create their own online accounts / profiles
 * Saving their data and formating them into charts
 * Allow the user to view their previous budgets / spending for previous months
