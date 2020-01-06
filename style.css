@@ -132,6 +132,7 @@ body {
 }
 
 .add_description,
+.add_date,
 .add_value {
    border: 1px solid #3b5998;
    color: #000;
@@ -143,6 +144,7 @@ body {
 }
 
 .add_description { width: 400px; }
+.add_date { width: 150px; }
 .add_value { width: 100px; }
 
 .add_btn {
@@ -161,6 +163,7 @@ body {
 
 .add_type:focus,
 .add_description:focus,
+.add_date:focus,
 .add_value:focus {
     outline: none;
     border: 1px solid #28B9B5;
@@ -205,6 +208,11 @@ h2 {
 
 .item_description {
    float: left;
+}
+
+.item_date {
+   float: left;
+   padding-left: 10px;
 }
 
 .item_value {

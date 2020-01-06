@@ -3,9 +3,10 @@
 // BUDGET CONTROLLER
 let budgetController = (function () {
    
-   let Expense = function (id, description, value) {
+   let Expense = function (id, description, date, value) {
       this.id = id;
       this.description = description;
+      this.date = date;
       this.value = value;
       this.percentage = -1;
    };
@@ -23,9 +24,10 @@ let budgetController = (function () {
       return this.percentage;
    };
 
-   let Income = function (id, description, value) {
+   let Income = function (id, description, date, value) {
       this.id = id;
       this.description = description;
+      this.date = date;
       this.value = value;
    };
 
@@ -52,7 +54,7 @@ let budgetController = (function () {
    };
 
    return {
-      addItem: function (type, des, val) {
+      addItem: function (type, des, date, val) {
          let newItem;
 
          //Create new ID
@@ -64,9 +66,9 @@ let budgetController = (function () {
 
          //Create new item based on 'inc' or 'exp' type
          if (type === 'exp') {
-            newItem = new Expense(ID, des, val);
+            newItem = new Expense(ID, des, date, val);
          } else if (type === 'inc') {
-            newItem = new Income(ID, des, val);
+            newItem = new Income(ID, des, date, val);
          }
          //Push it into our data structure
          data.allItems[type].push(newItem);
@@ -145,6 +147,7 @@ let UIController = (function () {
    let DOMstrings = {
       inputType: '.add_type',
       inputDescription: '.add_description',
+      inputDate: '.add_date',
       inputValue: '.add_value',
       inputBtn: '.add_btn',
       incomeContainer: '.income_list',
@@ -188,6 +191,7 @@ let UIController = (function () {
          return {
             type: document.querySelector(DOMstrings.inputType).value,
             description: document.querySelector(DOMstrings.inputDescription).value,
+            date: document.querySelector(DOMstrings.inputDate).value,
             value: parseFloat(document.querySelector(DOMstrings.inputValue).value) //Parsefloat converts this string into a number. We need the value to be set as a number for calculations to be done.
 
          };
@@ -200,16 +204,17 @@ let UIController = (function () {
          if (type === 'inc') {
             element = DOMstrings.incomeContainer;
 
-            html = '<div class="item clearfix" id="inc-%id%"><div class="item_description">%description%</div><div class="right clearfix"><div class="item_value">%value%</div><div class="item_delete"><button class="item_delete_btn"><i class="far fa-window-close"></i></button></div></div></div>';
+            html = '<div class="item clearfix" id="inc-%id%"><div class="item_description">%description%</div><div class="item_date">%date%</div><div class="right clearfix"><div class="item_value">%value%</div><div class="item_delete"><button class="item_delete_btn"><i class="far fa-window-close"></i></button></div></div></div>';
          } else if (type === 'exp') {
             element = DOMstrings.expensesContainer;
 
-            html = '<div class="item clearfix" id="exp-%id%"><div class="item_description">%description%</div><div class="right clearfix"><div class="item_value">%value%</div><div class="item_percentage">21%</div><div class="item_delete"><button class="item_delete_btn"><i class="far fa-window-close"></i></button></div></div></div>';
+            html = '<div class="item clearfix" id="exp-%id%"><div class="item_description">%description%</div><div class="item_date">%date%</div><div class="right clearfix"><div class="item_value">%value%</div><div class="item_percentage">21%</div><div class="item_delete"><button class="item_delete_btn"><i class="far fa-window-close"></i></button></div></div></div>';
          }
 
          // Replace the placeholder text with some actual data
          newHtml = html.replace('%id%', obj.id);
          newHtml = newHtml.replace('%description%', obj.description);
+         newHtml = newHtml.replace('%date%', obj.date);
          newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
 
          // Insert the HTML into the DOM
@@ -224,7 +229,7 @@ let UIController = (function () {
       clearFields: function () {
          let fields, fieldsArr;
 
-         fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
+         fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputDate + ', ' + DOMstrings.inputValue);
 
          fieldsArr = Array.prototype.slice.call(fields);
 
@@ -282,6 +287,7 @@ let UIController = (function () {
          let fields = document.querySelectorAll(
             DOMstrings.inputType + ',' +
             DOMstrings.inputDescription + ',' +
+            DOMstrings.inputDate + ',' +
             DOMstrings.inputValue
          );
 
@@ -299,15 +305,6 @@ let UIController = (function () {
 
    
 })();
-
-
-
-
-
-
-
-
-
 
 // GLOBAL APP CONTROLLER
 // 1. budgetCtrl IS budgetcontroller, we simply call it something different for best practice. If we ever had to change anything with the budgetcontroller, we would simply need to 
@@ -362,9 +359,9 @@ let controller = (function (budgetCtrl, UICtrl) {
       // 1. Get the filed input data
       input = UICtrl.getInput();
 
-      if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
+      if (input.description !== "" && input.date!== "" && !isNaN(input.value) && input.value > 0) {
          // 2. Add the item to the budget Controller
-         newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+         newItem = budgetCtrl.addItem(input.type, input.description, input.date, input.value);
    
          // 3. Add the item to the UI
          UICtrl.addListItem(newItem, input.type);
