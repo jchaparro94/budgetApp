@@ -15,7 +15,6 @@
 * Allowing users to create their own online accounts / profiles
 * Saving their data and formating them into charts
 * Allow the user to view their previous budgets / spending for previous months
-* Possible include a DATE input section to show the dates when incomes and expenses happened.
-
+* Possible include a DATE input section to show the dates when incomes and expenses happened. (Completed)
 
 
